@@ -72,15 +72,14 @@ def query():
         query()
 
     def edit():
-        if id_num.get() == '':
-            pass
+        if id_num.get() in oid_list:
+            edit_win = tk.Toplevel()
+            edit_win.title(f"Edit Entry {id_num.get()}")
         else:
-            tk.Toplevel()
+            pass
 
     def erase():
-        if id_num.get() == '':
-            pass
-        else:
+        if id_num.get() in oid_list:
             database = sql.connect("Phone-numbers.db")
             c = database.cursor()
 
@@ -92,6 +91,8 @@ def query():
             id_num.delete(0, tk.END)
 
             refresh()
+        else:
+            pass
 
     def erase_all():
 
@@ -147,8 +148,7 @@ def query():
 
         count+=1
 
-    oid_list = [record[-1] for record in records]
-    print(oid_list)
+    oid_list = [str(record[-1]) for record in records]
 
     #Closing everything
     database.commit()
