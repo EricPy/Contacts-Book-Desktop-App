@@ -67,6 +67,16 @@ def query():
     id_num = tk.Entry(query_win, width=50)
     id_num.grid(row=0, column=1)
 
+    def refresh():
+        query_win.destroy()
+        query()
+
+    def edit():
+        if id_num.get() == '':
+            pass
+        else:
+            tk.Toplevel()
+
     def erase():
         if id_num.get() == '':
             pass
@@ -81,10 +91,7 @@ def query():
 
             id_num.delete(0, tk.END)
 
-            query_win.destroy()
-            query()
-
-    tk.Button(query_win, text="Delete Entry", command=erase, width= 50).grid(row=1, column=0, columnspan=2)
+            refresh()
 
     def erase_all():
 
@@ -105,7 +112,11 @@ def query():
         else:
             pass
 
-    tk.Button(query_win, text="Delete All", command=erase_all, width= 50).grid(row=2, column=0, columnspan=2)
+    
+    tk.Button(query_win, text="⟳", command=refresh).grid(row=0,column=2)
+    tk.Button(query_win, text="Edit Entry", command=edit, width= 55).grid(row=1, column=0, columnspan=3)
+    tk.Button(query_win, text="Delete Entry", command=erase, width= 55).grid(row=2, column=0, columnspan=3)
+    tk.Button(query_win, text="Delete All", command=erase_all, width= 55).grid(row=3, column=0, columnspan=3)
 
     #Fetching and displaying Data
     database = sql.connect("Phone-numbers.db")
@@ -135,6 +146,9 @@ def query():
             tk.Label(Dataframe, text=f"Birthday: {record[3]}").grid(row=3, column=0, sticky="w")
 
         count+=1
+
+    oid_list = [record[-1] for record in records]
+    print(oid_list)
 
     #Closing everything
     database.commit()
