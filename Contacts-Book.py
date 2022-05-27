@@ -1,6 +1,7 @@
 import tkinter as tk
 import sqlite3 as sql
 from tkinter import messagebox
+from turtle import width
 
 root = tk.Tk()
 root.title("Contacts")
@@ -74,7 +75,56 @@ def query():
     def edit():
         if id_num.get() in oid_list:
             edit_win = tk.Toplevel()
-            edit_win.title(f"Edit Entry {id_num.get()}")
+            edit_win.title(f"Edit Contact")
+            edit_win.geometry("370x100")
+
+            tk.Label(edit_win, text=f"(Entry {id_num.get()})").grid(row=0, column=0, pady=5, padx=3)
+            
+            # Dropdown menu
+            choices = ["Name", "Phone Number", "Address", "Birthday"]
+            chosen = tk.StringVar()
+            chosen.set(choices[0])
+
+            drop = tk.OptionMenu(edit_win, chosen, *choices)
+            drop.config(width=26)
+            drop.grid(row=0, column=1, pady=5, padx=2)
+
+            tk.Label(edit_win, text="Updated :").grid(row=1, column=0, sticky="w", padx=3)
+            new_data = tk.Entry(edit_win, width=30)
+            new_data.grid(row=1, column=1, padx=2)
+
+            data_type = chosen.get()
+
+            def change():
+
+                '''database = sql.connect("Phone-numbers.db")
+                c = database.cursor()
+
+                c.execute(f"""UPDATE addresses SET
+
+                    name = :name,
+                    number = :number,
+                    address = :address,
+                    birthday = :birthday
+                
+                    WHERE oid = :oid""", 
+                    
+                    
+                    
+                    
+                    
+                    )
+
+                database.commit()
+                database.close()'''
+
+                print(data_type)
+
+                new_data.delete(0,tk.END)
+
+
+            tk.Button(edit_win, text="Submit Change", width=20, command=change).grid(row=2, column=0, columnspan=2)
+            
         else:
             pass
 
