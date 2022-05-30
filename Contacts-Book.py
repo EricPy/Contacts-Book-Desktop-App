@@ -73,12 +73,16 @@ def query():
         query()
 
     def edit():
+        
         if id_num.get() in oid_list:
+
+            oid_num = id_num.get()
+
             edit_win = tk.Toplevel()
             edit_win.title(f"Edit Contact")
             edit_win.geometry("370x100")
 
-            tk.Label(edit_win, text=f"(Entry {id_num.get()})").grid(row=0, column=0, pady=5, padx=3)
+            tk.Label(edit_win, text=f"(Entry {oid_num})").grid(row=0, column=0, pady=5, padx=3)
             
             # Dropdown menu
             choices = ["Name", "Phone Number", "Address", "Birthday"]
@@ -93,35 +97,37 @@ def query():
             new_data = tk.Entry(edit_win, width=30)
             new_data.grid(row=1, column=1, padx=2)
 
-            data_type = chosen.get()
-
             def change():
+                
+                data_type = chosen.get()
 
-                '''database = sql.connect("Phone-numbers.db")
+                column_name_equivalents = {"Name" : "name",
+                                           "Phone Number" : "number",
+                                           "Address" : "address",
+                                           "Birthday" : "birthday"}
+
+                desired_column = column_name_equivalents[data_type]
+
+                database = sql.connect("Phone-numbers.db")
                 c = database.cursor()
 
-                c.execute(f"""UPDATE addresses SET
+                c.execute(f"""UPDATE contacts SET
 
-                    name = :name,
-                    number = :number,
-                    address = :address,
-                    birthday = :birthday
+                    {desired_column} = :updated_info
                 
                     WHERE oid = :oid""", 
-                    
-                    
-                    
-                    
-                    
-                    )
+                    {
+                    'updated_info' : new_data.get(),
+                    'oid' : oid_num
+                    })
 
                 database.commit()
-                database.close()'''
-
-                print(data_type)
+                database.close()
 
                 new_data.delete(0,tk.END)
 
+                refresh()
+                edit_win.destroy()
 
             tk.Button(edit_win, text="Submit Change", width=20, command=change).grid(row=2, column=0, columnspan=2)
             
